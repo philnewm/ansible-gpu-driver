@@ -1,0 +1,25 @@
+---
+
+- name: Update package cache
+  become: true
+  ansible.builtin.dnf:
+    update_cache: true
+
+- name: "Add ROCm repo on {{ ansible_distribution }}"
+  become: true
+  ansible.builtin.yum_repository:
+    name: rocm
+    description: "ROCm {{ amd_driver_version }} repository"
+    baseurl: "https://repo.radeon.com/rocm/el9/{{ amd_driver_version }}/main"
+    enabled: true
+    gpgcheck: true
+    gpgkey: https://repo.radeon.com/rocm/rocm.gpg.key
+    priority: 50
+
+- name: Install packages
+  become: true
+  ansible.builtin.dnf:
+    name: "{{ amd_driver_packages }}"
+    state: present
+
+...

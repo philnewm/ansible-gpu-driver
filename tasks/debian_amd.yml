@@ -1,0 +1,59 @@
+---
+
+- name: Update apt cache
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Check for gpg-key
+  ansible.builtin.stat:
+    path: /etc/apt/keyrings/rocm.gpg
+  register: key_stats
+
+- name: Set up gpg-key
+  when: not key_stats.stat.exists
+  block:
+    - name: Download ROCm GPG key
+      become: true
+      ansible.builtin.get_url:
+        url: https://repo.radeon.com/rocm/rocm.gpg.key
+        dest: /tmp/rocm.gpg.key
+        mode: '0644'
+
+    - name: Dearmor ROCm GPG key
+      become: true
+      ansible.builtin.command: >
+        gpg --dearmor -o /etc/apt/keyrings/rocm.gpg /tmp/rocm.gpg.key
+      args:
+        creates: /etc/apt/keyrings/rocm.gpg
+
+- name: "Add ROCm repo for Ubuntu"
+  when: ansible_distribution == "Ubuntu"
+  become: true
+  ansible.builtin.apt_repository:
+    repo: >
+      deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg]
+      https://repo.radeon.com/rocm/apt/{{ amd_driver_version }}
+      {{ ansible_distribution_release }} main
+    state: present
+    filename: "rocm"
+
+- name: "Add ROCm repo for Debian"
+  when: ansible_distribution == "Debian"
+  become: true
+  ansible.builtin.apt_repository:
+    repo: >
+      deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg]
+      https://repo.radeon.com/rocm/apt/{{ amd_driver_version }}
+      {{ debian_release_map[ansible_distribution] }} main
+    state: present
+    filename: "rocm"
+
+- name: Install packages
+  become: true
+  ansible.builtin.apt:
+    name: "{{ amd_driver_packages }}"
+    state: present
+
+...

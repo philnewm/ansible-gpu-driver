@@ -1,7 +1,17 @@
 ---
 
-# Uninstall and cleanup tasks
+- name: Remove amd packages
+  become: true
+  ansible.builtin.package:
+    name: "{{ amd_driver_packages }}"
+    state: absent
 
+- name: Install packages
+  become: true
+  ansible.builtin.package:
+    name: "{{ nvidia_driver_packages[ansible_os_family] }}"
+    state: absent
+  notify: Reboot Host
 
 - name: Remove unused dependencies
   become: true

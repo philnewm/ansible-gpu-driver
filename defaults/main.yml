@@ -1,7 +1,20 @@
 ---
 
-# Variables for ansible-role-template
-
 state: present
+
+gpu_vendors:
+  - nvidia
+  - amd
+
+ubuntu_version: "jammy"
+amd_driver_version: "6.4.1"
+
+rpm_fusion_repos:
+  - name: rpmfusion-free
+    gpg_key: "/usr/share/distribution-gpg-keys/rpmfusion/RPM-GPG-KEY-rpmfusion-free-el-{{ ansible_distribution_major_version }}"
+    src: "https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-{{ ansible_distribution_major_version }}.noarch.rpm"
+  - name: rpmfusion-nonfree
+    gpg_key: "/usr/share/distribution-gpg-keys/rpmfusion/RPM-GPG-KEY-rpmfusion-nonfree-el-{{ ansible_distribution_major_version }}"
+    src: "https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-{{ ansible_distribution_major_version }}.noarch.rpm"
 
 ...

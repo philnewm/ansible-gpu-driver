@@ -1,9 +1,21 @@
 ---
 
-# vars file for ansible-role-template
+supported_vendors:
+  - nvidia
+  - amd
 
+amd_driver_packages:
+  - hip-runtime-amd
+  - rocm-opencl-runtime
 
-# remove this placeholder
-ansible_role_template: "Default role name still in use."
+nvidia_driver_packages:
+  RedHat:
+    - akmod-nvidia
+    - xorg-x11-drv-nvidia-cuda
+  Debian:
+    - nvidia-driver-570
+
+debian_release_map:
+  "bookworm": "jammy"
 
 ...

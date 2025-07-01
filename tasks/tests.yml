@@ -1,5 +1,22 @@
 ---
 
-# tests to verify role functionality
+- name: Gather package facts
+  ansible.builtin.package_facts:
+
+- name: Test installed amd packages
+  loop: "{{ amd_driver_packages }}"
+  ansible.builtin.assert:
+    that:
+      - item in ansible_facts.packages
+    fail_msg: "Expected package '{{ item }}' is missing."
+    quiet: true
+
+- name: Test installed nvidia packages
+  loop: "{{ nvidia_driver_packages[ansible_os_family] }}"
+  ansible.builtin.assert:
+    that:
+      - item in ansible_facts.packages
+    fail_msg: "Expected package '{{ item }}' is missing."
+    quiet: true
 
 ...
