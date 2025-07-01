@@ -14,7 +14,7 @@
     state: present
   notify: Reboot Host
 
-- name: Install NVIDIA driver Debian
+- name: Install NVIDIA driver Ubuntu
   become: true
   when: ansible_distribution == "Ubuntu"
   ansible.builtin.apt:
