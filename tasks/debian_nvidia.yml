@@ -8,6 +8,15 @@
 
 - name: Install NVIDIA driver Debian
   become: true
+  when: ansible_distribution == "Debian"
+  ansible.builtin.apt:
+    name: nvidia-driver
+    state: present
+  notify: Reboot Host
+
+- name: Install NVIDIA driver Debian
+  become: true
+  when: ansible_distribution == "Ubuntu"
   ansible.builtin.apt:
     name: "{{ nvidia_driver_packages[ansible_os_family] }}"
     state: present

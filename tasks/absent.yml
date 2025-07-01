@@ -6,7 +6,7 @@
     name: "{{ amd_driver_packages }}"
     state: absent
 
-- name: Install packages
+- name: Remove nvidia driver packages
   become: true
   ansible.builtin.package:
     name: "{{ nvidia_driver_packages[ansible_os_family] }}"
