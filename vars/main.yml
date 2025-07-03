@@ -12,7 +12,7 @@ nvidia_driver_packages:
   RedHat: &rhel_packages
     - akmod-nvidia
     - xorg-x11-drv-nvidia-cuda
-  Almalinux: *rhel_packages
+  AlmaLinux: *rhel_packages
   Rocky: *rhel_packages
   CentOS: *rhel_packages
   Ubuntu:
