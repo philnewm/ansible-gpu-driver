@@ -6,19 +6,36 @@
     update_cache: true
     cache_valid_time: 3600
 
-- name: Install NVIDIA driver Debian
-  become: true
+- name: Debian prerequisites
   when: ansible_distribution == "Debian"
-  ansible.builtin.apt:
-    name: nvidia-driver
-    state: present
-  notify: Reboot Host
+  block:
+    - name: Install kernel headers
+      become: true
+      ansible.builtin.apt:
+        name:
+          - zstd
+          - linux-headers-amd64
+        state: present
 
-- name: Install NVIDIA driver Ubuntu
+    - name: Ensure non-free repos are present
+      become: true
+      ansible.builtin.copy:
+        dest: /etc/apt/sources.list.d/bookworm-main.list
+        content: |
+          deb http://deb.debian.org/debian/ bookworm main contrib non-free non-free-firmware
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Install kernel headers
+      become: true
+      ansible.builtin.apt:
+        update_cache: true
+
+- name: Install NVIDIA driver
   become: true
-  when: ansible_distribution == "Ubuntu"
   ansible.builtin.apt:
-    name: "{{ nvidia_driver_packages[ansible_os_family] }}"
+    name: "{{ nvidia_driver_packages[ansible_distribution] }}"
     state: present
   notify: Reboot Host
 

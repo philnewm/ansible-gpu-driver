@@ -13,6 +13,15 @@
     state: absent
   notify: Reboot Host
 
+# INFO prevent dnf from trying to remove kernel-core package
+- name: Ensure kernel-core is marked as user-installed
+  when: ansible_distribution in ["Rocky", "CentOS"]
+  become: true
+  ansible.builtin.command:
+    cmd: dnf mark install kernel-core
+  register: result
+  changed_when: result.rc == 0
+
 - name: Remove unused dependencies
   become: true
   ansible.builtin.package:

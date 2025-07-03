@@ -5,16 +5,6 @@
   ansible.builtin.dnf:
     update_cache: true
 
-# - name: Import epel GPG key
-#   become: true
-#   ansible.builtin.rpm_key:
-#     key: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
-#     state: present
-#   register: result
-#   until: result is succeeded
-#   retries: 5
-#   delay: 10
-
 - name: Install epel repo
   become: true
   ansible.builtin.dnf:
@@ -37,10 +27,10 @@
   ansible.builtin.rpm_key:
     key: "{{ key.gpg_key }}"
     state: present
-  # register: result
-  # until: result is succeeded
-  # retries: 5
-  # delay: 10
+  register: result
+  until: result is succeeded
+  retries: 5
+  delay: 10
 
 - name: Install additional repos
   become: true
@@ -53,15 +43,15 @@
     name: "{{ repo.src }}"
     state: present
     update_cache: true
-  # register: result
-  # until: result is succeeded
-  # retries: 5
-  # delay: 10
+  register: result
+  until: result is succeeded
+  retries: 5
+  delay: 10
 
 - name: Install packages
   become: true
   ansible.builtin.package:
-    name: "{{ nvidia_driver_packages[ansible_os_family] }}"
+    name: "{{ nvidia_driver_packages[ansible_distribution] }}"
     state: present
   notify: Reboot Host
 

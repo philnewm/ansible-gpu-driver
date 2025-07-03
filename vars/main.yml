@@ -9,11 +9,17 @@ amd_driver_packages:
   - rocm-opencl-runtime
 
 nvidia_driver_packages:
-  RedHat:
+  RedHat: &rhel_packages
     - akmod-nvidia
     - xorg-x11-drv-nvidia-cuda
-  Debian:
+  Almalinux: *rhel_packages
+  Rocky: *rhel_packages
+  CentOS: *rhel_packages
+  Ubuntu:
     - nvidia-driver-570
+  Debian:
+    - nvidia-driver
+    - firmware-misc-nonfree
 
 debian_release_map:
   "bookworm": "jammy"

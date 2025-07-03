@@ -12,7 +12,7 @@
     quiet: true
 
 - name: Test installed nvidia packages
-  loop: "{{ nvidia_driver_packages[ansible_os_family] }}"
+  loop: "{{ nvidia_driver_packages[ansible_distribution] }}"
   ansible.builtin.assert:
     that:
       - item in ansible_facts.packages
