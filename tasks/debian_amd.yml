@@ -56,4 +56,10 @@
     name: "{{ amd_driver_packages }}"
     state: present
 
+- name: Install 32-bit vulkan for compatibility
+  become: true
+  ansible.builtin.apt:
+    name: "mesa-vulkan-drivers:i386"
+    state: present
+
 ...

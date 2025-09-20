@@ -9,7 +9,6 @@ amd_driver_packages:
   - rocm-opencl-runtime
   - mesa-vulkan-drivers
   - mesa-dri-drivers
-  - mesa-vulkan-drivers.i686
 
 nvidia_driver_packages:
   RedHat: &rhel_packages
