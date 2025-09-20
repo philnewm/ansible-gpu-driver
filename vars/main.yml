@@ -5,10 +5,20 @@ supported_vendors:
   - amd
 
 amd_driver_packages:
-  - hip-runtime-amd
-  - rocm-opencl-runtime
-  - mesa-vulkan-drivers
-  - mesa-dri-drivers
+  default: &amd_default_packages
+    - hip-runtime-amd
+    - rocm-opencl-runtime
+    - mesa-vulkan-drivers
+  RedHat:
+    - *amd_default_packages
+    - mesa-dri-drivers
+  Debian:
+    - *amd_default_packages
+    - libgl1-mesa-dri
+
+amd_vulkan_driver_32_bit:
+  RedHat: "mesa-vulkan-drivers.i686"
+  Debian: "mesa-vulkan-drivers:i386"
 
 nvidia_driver_packages:
   RedHat: &rhel_packages
