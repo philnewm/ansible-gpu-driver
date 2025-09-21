@@ -16,9 +16,7 @@ amd_driver_packages:
     - *amd_default_packages
     - libgl1-mesa-dri
 
-amd_vulkan_driver_32_bit:
-  RedHat: "mesa-vulkan-drivers.i686"
-  Debian: "mesa-vulkan-drivers:i386"
+amd_vulkan_driver_32_bit: "mesa-vulkan-drivers.i686"
 
 nvidia_driver_packages:
   RedHat: &rhel_packages

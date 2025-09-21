@@ -9,8 +9,9 @@
 
 - name: Remove 32-bit vulkan
   become: true
+  when: ansible_os_family == "RedHat"
   ansible.builtin.package:
-    name: "{{ amd_vulkan_driver_32_bit[ansible_os_family] }}"
+    name: "{{ amd_vulkan_driver_32_bit }}"
     state: absent
 
 - name: Remove nvidia driver packages

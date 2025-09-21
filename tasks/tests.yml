@@ -4,7 +4,7 @@
   ansible.builtin.package_facts:
 
 - name: Test installed amd packages
-  loop: "{{ amd_driver_packages[ansible_os_family] }}"
+  loop: "{{ amd_driver_packages[ansible_os_family] | flatten }}"
   ansible.builtin.assert:
     that:
       - item in ansible_facts.packages

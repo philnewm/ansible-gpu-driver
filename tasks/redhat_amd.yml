@@ -26,7 +26,7 @@
 - name: Install 32-bit vulkan for compatibility
   become: true
   ansible.builtin.dnf:
-    name: "{{ amd_vulkan_driver_32_bit[ansible_os_family] }}"
+    name: "{{ amd_vulkan_driver_32_bit }}"
     state: present
 
 ...
