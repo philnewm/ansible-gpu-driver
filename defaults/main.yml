@@ -7,14 +7,18 @@ gpu_vendors:
   - amd
 
 ubuntu_version: "jammy"
-amd_driver_version: "6.4.1"
+amd_driver_version: "7.1"
+rocm_repo: el9
+rpm_fusion_repo: el
 
+# TODO test compatibility with fedora
+# https://download1.rpmfusion.org/free/fedora/RPM-GPG-KEY-rpmfusion-free-fedora-2020
 rpm_fusion_repos:
   - name: rpmfusion-free
-    gpg_key: "/usr/share/distribution-gpg-keys/rpmfusion/RPM-GPG-KEY-rpmfusion-free-el-{{ ansible_distribution_major_version }}"
-    src: "https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-{{ ansible_distribution_major_version }}.noarch.rpm"
+    gpg_key: "/usr/share/distribution-gpg-keys/rpmfusion/RPM-GPG-KEY-rpmfusion-free-{{ rpm_fusion_repo }}-{{ ansible_distribution_major_version }}"
+    src: "https://mirrors.rpmfusion.org/free/{{ rpm_fusion_repo }}/rpmfusion-free-release-{{ ansible_distribution_major_version }}.noarch.rpm"
   - name: rpmfusion-nonfree
-    gpg_key: "/usr/share/distribution-gpg-keys/rpmfusion/RPM-GPG-KEY-rpmfusion-nonfree-el-{{ ansible_distribution_major_version }}"
-    src: "https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-{{ ansible_distribution_major_version }}.noarch.rpm"
+    gpg_key: "/usr/share/distribution-gpg-keys/rpmfusion/RPM-GPG-KEY-rpmfusion-nonfree-{{ rpm_fusion_repo }}-{{ ansible_distribution_major_version }}"
+    src: "https://mirrors.rpmfusion.org/nonfree/{{ rpm_fusion_repo }}/rpmfusion-nonfree-release-{{ ansible_distribution_major_version }}.noarch.rpm"
 
 ...
