@@ -9,8 +9,8 @@
   become: true
   ansible.builtin.yum_repository:
     name: rocm
-    description: "ROCm {{ amd_driver_version }} repository"
-    baseurl: "https://repo.radeon.com/rocm/{{ rocm_repo }}/{{ amd_driver_version }}/main"
+    description: "ROCm {{ amd_rocm_version }} repository"
+    baseurl: "https://repo.radeon.com/rocm/{{ rocm_repo }}/{{ amd_rocm_version }}/main"
     enabled: true
     gpgcheck: true
     gpgkey: https://repo.radeon.com/rocm/rocm.gpg.key

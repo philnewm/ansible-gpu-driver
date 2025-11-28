@@ -7,7 +7,7 @@ gpu_vendors:
   - amd
 
 ubuntu_version: "jammy"
-amd_driver_version: "7.1"
+amd_rocm_version: "6.4.4"
 rocm_repo: el9
 rpm_fusion_repo: el
 
