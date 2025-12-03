@@ -1,30 +1,32 @@
 ---
 
-- name: Update package cache
-  become: true
-  ansible.builtin.dnf:
-    update_cache: true
-
 - name: "Add ROCm repo on {{ ansible_distribution }}"
   become: true
+  when: ansible_distribution | lower in gpu_driver_rhel_derivatives
   ansible.builtin.yum_repository:
     name: rocm
-    description: "ROCm {{ amd_rocm_version }} repository"
-    baseurl: "https://repo.radeon.com/rocm/{{ rocm_repo }}/{{ amd_rocm_version }}/main"
+    description: "ROCm {{ gpu_driver_amd_rocm_version }} repository"
+    baseurl: "https://repo.radeon.com/rocm/{{ gpu_driver_rocm_repo }}/{{ gpu_driver_amd_rocm_version }}/main"
     enabled: true
     gpgcheck: true
     gpgkey: https://repo.radeon.com/rocm/rocm.gpg.key
     priority: 50
 
+- name: Update package cache
+  become: true
+  ansible.builtin.dnf:
+    update_cache: true
+
 - name: Install packages
   become: true
-  loop: "{{ amd_driver_packages[ansible_os_family] | flatten }}"
+  loop: "{{ amd_driver_packages[ansible_distribution | lower] | flatten }}"
   ansible.builtin.dnf:
     name: "{{ item }}"
     state: present
 
-- name: Install 32-bit vulkan for compatibility
+- name: Install 32-bit vulkan package
   become: true
+  when: ansible_distribution | lower in gpu_driver_rhel_derivatives and gpu_driver_rhel_amd_vulkan_32bit
   ansible.builtin.dnf:
     name: "{{ amd_vulkan_driver_32_bit }}"
     state: present

@@ -6,19 +6,9 @@ gpu_vendors:
   - nvidia
   - amd
 
-ubuntu_version: "jammy"
-amd_rocm_version: "6.4.4"
-rocm_repo: el9
-rpm_fusion_repo: el
-
-# TODO test compatibility with fedora
-# https://download1.rpmfusion.org/free/fedora/RPM-GPG-KEY-rpmfusion-free-fedora-2020
-rpm_fusion_repos:
-  - name: rpmfusion-free
-    gpg_key: "/usr/share/distribution-gpg-keys/rpmfusion/RPM-GPG-KEY-rpmfusion-free-{{ rpm_fusion_repo }}-{{ ansible_distribution_major_version }}"
-    src: "https://mirrors.rpmfusion.org/free/{{ rpm_fusion_repo }}/rpmfusion-free-release-{{ ansible_distribution_major_version }}.noarch.rpm"
-  - name: rpmfusion-nonfree
-    gpg_key: "/usr/share/distribution-gpg-keys/rpmfusion/RPM-GPG-KEY-rpmfusion-nonfree-{{ rpm_fusion_repo }}-{{ ansible_distribution_major_version }}"
-    src: "https://mirrors.rpmfusion.org/nonfree/{{ rpm_fusion_repo }}/rpmfusion-nonfree-release-{{ ansible_distribution_major_version }}.noarch.rpm"
+gpu_driver_amd_rocm_version: "7.1.1"
+gpu_driver_rocm_repo: rhel9
+gpu_driver_rpm_fusion_target_distro: "EL"
+gpu_driver_rhel_amd_vulkan_32bit: true
 
 ...

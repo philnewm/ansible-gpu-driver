@@ -5,53 +5,54 @@
   ansible.builtin.dnf:
     update_cache: true
 
-- name: Install epel repo
-  become: true
-  ansible.builtin.dnf:
-    name: epel-release
-    state: present
+- name: Set mup repos for rhel systems
+  when: ansible_distribution | lower in gpu_driver_rhel_derivatives
+  block:
+    - name: Install epel repo
+      become: true
+      ansible.builtin.dnf:
+        name: epel-release
+        state: present
 
-- name: Install distribution-gpg-keys package
-  become: true
-  ansible.builtin.dnf:
-    name: distribution-gpg-keys
-    state: present
+    - name: Set up repos
+      become: true
+      loop: "{{ gpu_driver_rpmfusion_repos }}"
+      loop_control:
+        loop_var: repo
+        label: "{{ repo.name }}"
+      ansible.builtin.yum_repository:
+        name: "{{ repo.name }}"
+        description: "{{ repo.description }}"
+        baseurl: "{{ repo.baseurl }}"
+        priority: "{{ repo.priority }}"
+        timeout: "{{ repo.timeout }}"
+        enabled: "{{ repo.enabled | default(true) }}"
+        gpgcheck: "{{ repo.enabled }}"
+        gpgkey: "{{ repo.gpgkey }}"
+        metadata_expire: "{{ repo.metadata_expire | default(21600) }}"
+        skip_if_unavailable: "{{ repo.skip_if_unavailable | default(false) }}"
+        mode: "0644"
+        owner: "root"
+        state: present
+      register: dnf_repo_setup
 
-- name: Import GPG keys
-  become: true
-  loop: "{{ rpm_fusion_repos }}"
-  loop_control:
-    loop_var: key
-    label: "{{ key.name }}"
-  when: key.name not in ansible_facts.packages
-  ansible.builtin.rpm_key:
-    key: "{{ key.gpg_key }}"
-    state: present
-  register: result
-  until: result is succeeded
-  retries: 5
-  delay: 10
+    - name: Clean dnf cache
+      become: true
+      when: dnf_repo_setup.changed
+      ansible.builtin.command:
+        cmd: dnf clean all
+      register: dnf_clean_result
+      changed_when: dnf_clean_result.rc == 0
 
-- name: Install additional repos
-  become: true
-  loop: "{{ rpm_fusion_repos }}"
-  loop_control:
-    loop_var: repo
-    label: "{{ repo.name }}"
-  when: repo.name not in ansible_facts.packages
-  ansible.builtin.dnf:
-    name: "{{ repo.src }}"
-    state: present
-    update_cache: true
-  register: result
-  until: result is succeeded
-  retries: 5
-  delay: 10
+    - name: Update dnf metadata cache
+      become: true
+      ansible.builtin.dnf:
+        update_cache: true
 
 - name: Install packages
   become: true
   ansible.builtin.package:
-    name: "{{ nvidia_driver_packages[ansible_distribution] }}"
+    name: "{{ nvidia_driver_packages[ansible_distribution | lower] }}"
     state: present
   notify: Reboot Host
 

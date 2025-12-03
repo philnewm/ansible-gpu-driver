@@ -2,14 +2,14 @@
 
 - name: Remove amd packages
   become: true
-  loop: "{{ amd_driver_packages[ansible_os_family] | flatten }}"
+  loop: "{{ amd_driver_packages[ansible_os_family | lower] | flatten }}"
   ansible.builtin.package:
     name: "{{ item }}"
     state: absent
 
 - name: Remove 32-bit vulkan
   become: true
-  when: ansible_os_family == "RedHat"
+  when: ansible_distribution | lower in gpu_driver_rhel_derivatives
   ansible.builtin.package:
     name: "{{ amd_vulkan_driver_32_bit }}"
     state: absent
@@ -17,13 +17,13 @@
 - name: Remove nvidia driver packages
   become: true
   ansible.builtin.package:
-    name: "{{ nvidia_driver_packages[ansible_os_family] }}"
+    name: "{{ nvidia_driver_packages[ansible_os_family | lower] }}"
     state: absent
   notify: Reboot Host
 
 # INFO prevent dnf from trying to remove kernel-core package
 - name: Ensure kernel-core is marked as user-installed
-  when: ansible_distribution in ["Rocky", "CentOS"]
+  when: ansible_distribution | lower in ["rocky", "centos"]
   become: true
   ansible.builtin.command:
     cmd: dnf mark install kernel-core

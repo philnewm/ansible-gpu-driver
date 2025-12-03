@@ -35,7 +35,7 @@
 - name: Install NVIDIA driver
   become: true
   ansible.builtin.apt:
-    name: "{{ nvidia_driver_packages[ansible_distribution] }}"
+    name: "{{ nvidia_driver_packages[ansible_distribution | lower] }}"
     state: present
   notify: Reboot Host
 

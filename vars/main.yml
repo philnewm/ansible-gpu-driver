@@ -4,32 +4,71 @@ supported_vendors:
   - nvidia
   - amd
 
+gpu_driver_rhel_derivatives:
+  - redhat
+  - centos
+  - almalinux
+  - rocky
+
 amd_driver_packages:
   default: &amd_default_packages
-    - hip-runtime-amd
-    - rocm-opencl-runtime
     - mesa-vulkan-drivers
-  RedHat:
+  redhat: &amd_rhel_packages
     - *amd_default_packages
     - mesa-dri-drivers
-  Debian:
+    - rocm-hip-runtime
+    - rocm-opencl-runtime
+  centos:
+    - *amd_rhel_packages
+  almalinux:
+    - *amd_rhel_packages
+  rocky:
+    - *amd_rhel_packages
+  fedora:
+    - *amd_default_packages
+    - rocm-hip
+    - rocm-opencl
+    - hiprt
+  debian: &amd_deb_packages
     - *amd_default_packages
     - libgl1-mesa-dri
+  ubuntu:
+    - *amd_deb_packages
 
 amd_vulkan_driver_32_bit: "mesa-vulkan-drivers.i686"
 
 nvidia_driver_packages:
-  RedHat: &rhel_packages
+  redhat: &rhel_packages
     - akmod-nvidia
     - xorg-x11-drv-nvidia-cuda
-  AlmaLinux: *rhel_packages
-  Rocky: *rhel_packages
-  CentOS: *rhel_packages
-  Ubuntu:
+  almalinux: *rhel_packages
+  rocky: *rhel_packages
+  centos: *rhel_packages
+  ubuntu:
     - nvidia-driver-570
-  Debian:
+  debian:
     - nvidia-driver
     - firmware-misc-nonfree
+
+gpu_driver_rpmfusion_repos:
+  - name: "rpmfusion-free-updates"
+    description: "RPM Fusion for {{ gpu_driver_rpm_fusion_target_distro }} {{ ansible_distribution_major_version }} - Free - Updates"
+    baseurl: "https://download1.rpmfusion.org/free/{{ gpu_driver_rpm_fusion_target_distro | lower }}/updates/{{ ansible_distribution_major_version }}/$basearch/"
+    enabled: true
+    gpgcheck: true
+    gpgkey: "https://download1.rpmfusion.org/free/{{ gpu_driver_rpm_fusion_target_distro | lower }}/RPM-GPG-KEY-rpmfusion-free-{{ gpu_driver_rpm_fusion_target_distro | lower }}-{{ ansible_distribution_major_version }}"
+    priority: 99
+    timeout: 3
+    skip_if_unavailable: false
+  - name: rpmfusion-nonfree-updates
+    description: "RPM Fusion for {{ gpu_driver_rpm_fusion_target_distro }} {{ ansible_distribution_major_version }} - Nonfree - Updates"
+    baseurl: "https://download1.rpmfusion.org/nonfree/{{ gpu_driver_rpm_fusion_target_distro | lower }}/updates/{{ ansible_distribution_major_version }}/$basearch/"
+    enabled: true
+    gpgcheck: true
+    gpgkey: "https://download1.rpmfusion.org/nonfree/{{ gpu_driver_rpm_fusion_target_distro | lower }}/RPM-GPG-KEY-rpmfusion-nonfree-{{ gpu_driver_rpm_fusion_target_distro | lower }}-{{ ansible_distribution_major_version }}"
+    priority: 99
+    timeout: 3
+    skip_if_unavailable: false
 
 debian_release_map:
   "bookworm": "jammy"
