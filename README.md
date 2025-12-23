@@ -5,7 +5,7 @@
 
 Role description
 
-This role includes a molecule testing setup as a submodule at `molecule/default`
+This role includes a molecule testing setup as a submodule at `molecule/`
 
 ## Structure
 
