@@ -21,6 +21,11 @@
         dest: /tmp/rocm.gpg.key
         mode: '0644'
 
+    - name: Ensure gpg is available
+      become: true
+      ansible.builtin.apt:
+        name: gpg
+
     - name: Dearmor ROCm GPG key
       become: true
       ansible.builtin.command: >
@@ -29,30 +34,30 @@
         creates: /etc/apt/keyrings/rocm.gpg
 
 - name: "Add ROCm repo for Ubuntu"
-  when: ansible_distribution == "Ubuntu"
+  when: ansible_facts.distribution == "Ubuntu"
   become: true
   ansible.builtin.apt_repository:
     repo: >
       deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg]
       https://repo.radeon.com/rocm/apt/{{ gpu_driver_amd_rocm_version }}
-      {{ ansible_distribution_release }} main
+      {{ ansible_facts.distribution_release }} main
     state: present
     filename: "rocm"
 
 - name: "Add ROCm repo for Debian"
-  when: ansible_distribution == "Debian"
+  when: ansible_facts.distribution == "Debian"
   become: true
   ansible.builtin.apt_repository:
     repo: >
       deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg]
       https://repo.radeon.com/rocm/apt/{{ gpu_driver_amd_rocm_version }}
-      {{ debian_release_map[ansible_distribution_release] }} main
+      {{ debian_release_map[ansible_facts.distribution_release] }} main
     state: present
     filename: "rocm"
 
 - name: Install packages
   become: true
-  loop: "{{ amd_driver_packages[ansible_distribution | lower] | flatten }}"
+  loop: "{{ amd_driver_packages[ansible_facts.distribution | lower] | flatten }}"
   ansible.builtin.apt:
     name: "{{ item }}"
     state: present

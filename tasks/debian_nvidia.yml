@@ -7,7 +7,7 @@
     cache_valid_time: 3600
 
 - name: Debian prerequisites
-  when: ansible_distribution == "Debian"
+  when: ansible_facts.distribution == "Debian"
   block:
     - name: Install kernel headers
       become: true
@@ -35,7 +35,7 @@
 - name: Install NVIDIA driver
   become: true
   ansible.builtin.apt:
-    name: "{{ nvidia_driver_packages[ansible_distribution | lower] }}"
+    name: "{{ nvidia_driver_packages[ansible_facts.distribution | lower] }}"
     state: present
   notify: Reboot Host
 

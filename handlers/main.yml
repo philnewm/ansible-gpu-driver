@@ -1,6 +1,7 @@
 ---
 
 - name: Reboot Host
+  when: ansible_facts.virtualization_type not in ["docker", "podman", "container"]
   become: true
   ansible.builtin.reboot:
     msg: "Reboot initiated by Ansible"

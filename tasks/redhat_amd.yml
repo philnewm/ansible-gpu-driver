@@ -1,8 +1,8 @@
 ---
 
-- name: "Add ROCm repo on {{ ansible_distribution }}"
+- name: "Add ROCm repo on {{ ansible_facts.distribution }}"
   become: true
-  when: ansible_distribution | lower in gpu_driver_rhel_derivatives
+  when: ansible_facts.distribution | lower in gpu_driver_rhel_derivatives
   ansible.builtin.yum_repository:
     name: rocm
     description: "ROCm {{ gpu_driver_amd_rocm_version }} repository"
@@ -19,16 +19,18 @@
 
 - name: Install packages
   become: true
-  loop: "{{ amd_driver_packages[ansible_distribution | lower] | flatten }}"
+  loop: "{{ amd_driver_packages[ansible_facts.distribution | lower] | flatten }}"
   ansible.builtin.dnf:
     name: "{{ item }}"
     state: present
 
+# INFO prevents missinterpretation of existing x86_64 package
 - name: Install 32-bit vulkan package
   become: true
-  when: ansible_distribution | lower in gpu_driver_rhel_derivatives and gpu_driver_rhel_amd_vulkan_32bit
-  ansible.builtin.dnf:
-    name: "{{ amd_vulkan_driver_32_bit }}"
-    state: present
+  when: ansible_facts.distribution | lower in gpu_driver_rhel_derivatives and gpu_driver_rhel_amd_vulkan_32bit
+  ansible.builtin.command:
+    cmd: dnf -y install mesa-vulkan-drivers.i686
+  register: vulkan_i686
+  changed_when: "'Nothing to do' not in vulkan_i686.stdout"
 
 ...

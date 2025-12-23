@@ -5,8 +5,8 @@
   ansible.builtin.dnf:
     update_cache: true
 
-- name: Set mup repos for rhel systems
-  when: ansible_distribution | lower in gpu_driver_rhel_derivatives
+- name: Set up repos for rhel systems
+  when: ansible_facts.distribution | lower in gpu_driver_rhel_derivatives
   block:
     - name: Install epel repo
       become: true
@@ -49,11 +49,12 @@
       ansible.builtin.dnf:
         update_cache: true
 
-- name: Install packages
-  become: true
-  ansible.builtin.package:
-    name: "{{ nvidia_driver_packages[ansible_distribution | lower] }}"
-    state: present
-  notify: Reboot Host
+    # INFO exclude fedora43 until use-case is available
+    - name: Install packages
+      become: true
+      ansible.builtin.package:
+        name: "{{ nvidia_driver_packages[ansible_facts.distribution | lower] }}"
+        state: present
+      notify: Reboot Host
 
 ...
