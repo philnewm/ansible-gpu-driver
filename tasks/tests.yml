@@ -1,43 +1,7 @@
 ---
 
-- name: Gather package facts
-  ansible.builtin.package_facts:
-
-- name: Test installed amd packages
-  loop: "{{ amd_driver_packages[ansible_facts.distribution | lower] | flatten }}"
-  ansible.builtin.assert:
-    that:
-      - item in ansible_facts.packages
-    fail_msg: "Expected package '{{ item }}' is missing."
-    quiet: true
-
-- name: Check amd 32-bit vulkan
-  when: ansible_facts.distribution | lower in gpu_driver_rhel_derivatives and gpu_driver_rhel_amd_vulkan_32bit
-  block:
-    - name: Get full package names
-      ansible.builtin.shell:
-        cmd: |
-          set -o pipefail
-          dnf list installed | grep mesa-vulkan-drivers | awk '{print $1}'
-        executable: /bin/bash
-      changed_when: false
-      failed_when: false
-      register: mesa_vulkan_result
-
-    - name: Test 32-bit mesa-vulkan
-      ansible.builtin.assert:
-        that:
-          - amd_vulkan_driver_32_bit in mesa_vulkan_result.stdout_lines
-        fail_msg: "Failed to find package {{ amd_vulkan_driver_32_bit }}"
-        quiet: true
-
-- name: Test installed nvidia packages
-  loop: "{{ nvidia_driver_packages[ansible_facts.distribution | lower] }}"
-  ansible.builtin.assert:
-    that:
-      - item in ansible_facts.packages
-    fail_msg: "Expected package '{{ item }}' is missing."
-    quiet: true
-
+- name: No tests
+  ansible.builtin.debug:
+    msg: "Tests are obsolete - converge and idempotence handle it already"
 
 ...

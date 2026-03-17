@@ -32,6 +32,9 @@ amd_driver_packages:
   debian: &amd_deb_packages
     - *amd_default_packages
     - libgl1-mesa-dri
+    - rocm-hip-runtime
+    - rocm-opencl-runtime
+    - rocminfo
   ubuntu:
     - *amd_deb_packages
 
@@ -74,5 +77,7 @@ gpu_driver_rpmfusion_repos:
 debian_release_map:
   "bookworm": "jammy"
   "trixie": "noble"
+  "jammy": "jammy"
+  "noble": "noble"
 
 ...

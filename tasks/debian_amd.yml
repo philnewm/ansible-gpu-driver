@@ -1,65 +1,33 @@
 ---
 
-- name: Update apt cache
+- name: Add ROCm repository
   become: true
-  ansible.builtin.apt:
-    update_cache: true
-    cache_valid_time: 3600
-
-- name: Check for gpg-key
-  ansible.builtin.stat:
-    path: /etc/apt/keyrings/rocm.gpg
-  register: key_stats
-
-- name: Set up gpg-key
-  when: not key_stats.stat.exists
-  block:
-    - name: Download ROCm GPG key
-      become: true
-      ansible.builtin.get_url:
-        url: https://repo.radeon.com/rocm/rocm.gpg.key
-        dest: /tmp/rocm.gpg.key
-        mode: '0644'
-
-    - name: Ensure gpg is available
-      become: true
-      ansible.builtin.apt:
-        name: gpg
-
-    - name: Dearmor ROCm GPG key
-      become: true
-      ansible.builtin.command: >
-        gpg --dearmor -o /etc/apt/keyrings/rocm.gpg /tmp/rocm.gpg.key
-      args:
-        creates: /etc/apt/keyrings/rocm.gpg
-
-- name: "Add ROCm repo for Ubuntu"
-  when: ansible_facts.distribution == "Ubuntu"
-  become: true
-  ansible.builtin.apt_repository:
-    repo: >
-      deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg]
-      https://repo.radeon.com/rocm/apt/{{ gpu_driver_amd_rocm_version }}
-      {{ ansible_facts.distribution_release }} main
+  ansible.builtin.deb822_repository:
+    name: rocm
+    types: [deb]
+    uris: "https://repo.radeon.com/rocm/apt/{{ gpu_driver_amd_rocm_version }}"
+    suites: "{{ debian_release_map[ansible_facts.distribution_release | lower] }}"
+    components: [main]
+    architectures: [amd64]
+    signed_by: https://repo.radeon.com/rocm/rocm.gpg.key
     state: present
-    filename: "rocm"
+    install_python_debian: true
 
-- name: "Add ROCm repo for Debian"
-  when: ansible_facts.distribution == "Debian"
+- name: Set repo priority (prevent ubuntu updates repo conflicts)
   become: true
-  ansible.builtin.apt_repository:
-    repo: >
-      deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg]
-      https://repo.radeon.com/rocm/apt/{{ gpu_driver_amd_rocm_version }}
-      {{ debian_release_map[ansible_facts.distribution_release] }} main
-    state: present
-    filename: "rocm"
+  ansible.builtin.copy:
+    dest: /etc/apt/preferences.d/rocm-repo
+    content: |
+      Package: *
+      Pin: release o=repo.radeon.com,a={{ debian_release_map[ansible_facts.distribution_release | lower] }}
+      Pin-Priority: 700
+    mode: "0644"
 
 - name: Install packages
   become: true
-  loop: "{{ amd_driver_packages[ansible_facts.distribution | lower] | flatten }}"
   ansible.builtin.apt:
-    name: "{{ item }}"
+    name: "{{ amd_driver_packages[ansible_facts.distribution | lower] | flatten }}"
     state: present
+    update_cache: true
 
 ...

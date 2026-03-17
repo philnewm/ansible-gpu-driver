@@ -38,7 +38,7 @@
 
     - name: Clean dnf cache
       become: true
-      when: dnf_repo_setup.changed
+      when: dnf_repo_setup.changed  # noqa: no-handler
       ansible.builtin.command:
         cmd: dnf clean all
       register: dnf_clean_result
@@ -49,7 +49,7 @@
       ansible.builtin.dnf:
         update_cache: true
 
-    # INFO exclude fedora43 until use-case is available
+    # Note exclude fedora43 until use-case is available
     - name: Install packages
       become: true
       ansible.builtin.package:

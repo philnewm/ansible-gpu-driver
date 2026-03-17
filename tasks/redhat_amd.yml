@@ -24,7 +24,7 @@
     name: "{{ item }}"
     state: present
 
-# INFO prevents missinterpretation of existing x86_64 package
+# Note prevents missinterpretation of existing x86_64 package
 - name: Install 32-bit vulkan package
   become: true
   when: ansible_facts.distribution | lower in gpu_driver_rhel_derivatives and gpu_driver_rhel_amd_vulkan_32bit
