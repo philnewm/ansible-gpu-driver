@@ -17,7 +17,7 @@
   ansible.builtin.dnf:
     update_cache: true
 
-- name: Install packages
+- name: Install amd driver packages
   become: true
   loop: "{{ amd_driver_packages[ansible_facts.distribution | lower] | flatten }}"
   ansible.builtin.dnf:
@@ -32,5 +32,20 @@
     cmd: dnf -y install mesa-vulkan-drivers.i686
   register: vulkan_i686
   changed_when: "'Nothing to do' not in vulkan_i686.stdout"
+
+- name: Gather system groups
+  ansible.builtin.getent:
+    database: group
+
+- name: Ensure ROCm-required groups exist
+  ansible.builtin.assert:
+    that:
+      - "'video' in ansible_facts.getent_group"
+      - "'render' in ansible_facts.getent_group"
+    fail_msg: >-
+      ROCm installation is inconsistent: required groups are missing.
+      video={{ 'video' in ansible_facts.getent_group }},
+      render={{ 'render' in ansible_facts.getent_group }}
+    quiet: true
 
 ...

@@ -1,13 +1,7 @@
 ---
 
-- name: Update apt cache
-  become: true
-  ansible.builtin.apt:
-    update_cache: true
-    cache_valid_time: 3600
-
 - name: Debian prerequisites
-  when: ansible_facts.distribution == "Debian"
+  when: ansible_facts.distribution | lower == "debian"
   block:
     - name: Install kernel headers
       become: true
@@ -16,6 +10,7 @@
           - zstd
           - linux-headers-amd64
         state: present
+        update_cache: true
 
     - name: Ensure non-free repos are present
       become: true
@@ -27,16 +22,12 @@
         group: root
         mode: '0644'
 
-    - name: Install kernel headers
-      become: true
-      ansible.builtin.apt:
-        update_cache: true
-
-- name: Install NVIDIA driver
+- name: Install nvidia driver packages
   become: true
   ansible.builtin.apt:
     name: "{{ nvidia_driver_packages[ansible_facts.distribution | lower] }}"
     state: present
+    update_cache: true
   notify: Reboot Host
 
 ...

@@ -50,7 +50,7 @@
         update_cache: true
 
     # Note exclude fedora43 until use-case is available
-    - name: Install packages
+    - name: Install nvidia driver packages
       become: true
       ansible.builtin.package:
         name: "{{ nvidia_driver_packages[ansible_facts.distribution | lower] }}"

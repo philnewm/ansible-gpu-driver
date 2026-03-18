@@ -23,11 +23,26 @@
       Pin-Priority: 700
     mode: "0644"
 
-- name: Install packages
+- name: Install amd driver packages
   become: true
   ansible.builtin.apt:
     name: "{{ amd_driver_packages[ansible_facts.distribution | lower] | flatten }}"
     state: present
     update_cache: true
+
+- name: Gather system groups
+  ansible.builtin.getent:
+    database: group
+
+- name: Ensure ROCm-required groups exist
+  ansible.builtin.assert:
+    that:
+      - "'video' in ansible_facts.getent_group"
+      - "'render' in ansible_facts.getent_group"
+    fail_msg: >-
+      ROCm installation is inconsistent: required groups are missing.
+      video={{ 'video' in ansible_facts.getent_group }},
+      render={{ 'render' in ansible_facts.getent_group }}
+    quiet: true
 
 ...
