@@ -29,14 +29,19 @@ amd_driver_packages:
     - rocm-hip
     - rocm-opencl
     - hiprt
-  debian: &amd_deb_packages
+  debian:
     - *amd_default_packages
+    - firmware-amd-graphics
     - libgl1-mesa-dri
     - rocm-hip-runtime
     - rocm-opencl-runtime
     - rocminfo
   ubuntu:
-    - *amd_deb_packages
+    - *amd_default_packages
+    - libgl1-mesa-dri
+    - rocm-hip-runtime
+    - rocm-opencl-runtime
+    - rocminfo
 
 amd_vulkan_driver_32_bit: "mesa-vulkan-drivers.i686"
 
