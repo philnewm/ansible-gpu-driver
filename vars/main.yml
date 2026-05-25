@@ -13,6 +13,7 @@ gpu_driver_rhel_derivatives:
 amd_driver_packages:
   default: &amd_default_packages
     - mesa-vulkan-drivers
+    - rocm-smi
   redhat: &amd_rhel_packages
     - *amd_default_packages
     - mesa-dri-drivers
