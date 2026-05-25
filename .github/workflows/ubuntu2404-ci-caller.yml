@@ -23,7 +23,7 @@ permissions:
 
 jobs:
   ci:
-    uses: philnewm/ansible-role-repo-control/.github/workflows/molecule-ci-vbox.yml@main
+    uses: philnewm/ansible-role-repo-control/.github/workflows/molecule-ci-podman.yml@main
     with:
       scenario_name: ubuntu2404
 
