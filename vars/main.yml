@@ -85,5 +85,6 @@ debian_release_map:
   "trixie": "noble"
   "jammy": "jammy"
   "noble": "noble"
+  "resolute": "noble"
 
 ...
