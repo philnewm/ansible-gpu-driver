@@ -1,18 +1,15 @@
 ---
 
-- name: Gather package facts
-  ansible.builtin.package_facts:
-
 - name: Verify vendor list
-  when: (gpu_vendors | difference(supported_vendors)) | length > 0
+  when: (gpu_driver_vendors | difference(gpu_supported_vendors)) | length > 0
   ansible.builtin.fail:
-    msg: "Non-supported gpu_vendors found: {{ gpu_vendors | difference(supported_vendors) }}"
+    msg: "Non-supported gpu vendors found: {{ gpu_driver_vendors | difference(gpu_supported_vendors) }}"
 
 - name: Install gpu driver
-  loop: "{{ gpu_vendors }}"
+  loop: "{{ gpu_driver_vendors }}"
   loop_control:
     loop_var: "gpu_vendor"
-  ansible.builtin.include_tasks:
-    file: "{{ ansible_facts.os_family | lower }}_{{ gpu_vendor | lower }}.yml"
+  ansible.builtin.include_role:
+    name: "philnewm.{{ gpu_vendor | lower }}_gpu"
 
 ...

@@ -1,7 +1,7 @@
 ---
 
-- name: No tests
+- name: No verify
   ansible.builtin.debug:
-    msg: "Tests are obsolete - converge and idempotence handle it already"
+    msg: "Obsolete for wrapper role"
 
 ...

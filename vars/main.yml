@@ -1,6 +1,6 @@
 ---
 
-supported_vendors:
+gpu_supported_vendors:
   - nvidia
   - amd
 

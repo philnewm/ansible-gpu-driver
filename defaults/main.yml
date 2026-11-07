@@ -2,13 +2,8 @@
 
 state: present
 
-gpu_vendors:
+gpu_driver_vendors:
   - nvidia
-  - amd
-
-gpu_driver_amd_rocm_version: "7.1.1"
-gpu_driver_rocm_repo: el9
-gpu_driver_rpm_fusion_target_distro: "EL"
-gpu_driver_rhel_amd_vulkan_32bit: true
+  # - amd
 
 ...
