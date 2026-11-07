@@ -1,5 +1,10 @@
 ---
 
+# ROCm 10 requires different install procedure
+# https://rocm.docs.amd.com/en/latest/install/rocm.html?fam=all&w=graphics&os=ubuntu&ubuntu-ver=26.04.1&i=amdgpu-install
+# rocm package name changes
+# https://rocm.docs.amd.com/en/latest/about/transition-guide-TheRock.html
+
 - name: "Add ROCm repo on {{ ansible_facts.distribution }}"
   become: true
   when: ansible_facts.distribution | lower in gpu_driver_rhel_derivatives

@@ -10,6 +10,8 @@ gpu_driver_rhel_derivatives:
   - almalinux
   - rocky
 
+# TODO translate package names to rocm10 https://rocm.docs.amd.com/en/docs-10.1.0/about/transition-guide-TheRock.html#major-changes
+# https://stable.repo.amd.com/rocm/core/packages/ubuntu2604/pool/main/index.html
 amd_driver_packages:
   default: &amd_default_packages
     - mesa-vulkan-drivers

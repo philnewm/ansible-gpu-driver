@@ -1,5 +1,9 @@
 ---
 
+# rpm fusion install now only works for fedora
+# mgiht still break from time to time
+# https://docs.fedoraproject.org/en-US/gaming/drivers/
+
 - name: Update package cache
   become: true
   ansible.builtin.dnf:
