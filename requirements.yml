@@ -2,5 +2,6 @@
 
 roles:
   - name: philnewm.nvidia_gpu
+  - name: philnewm.amd_gpu
 
 ...

@@ -4,6 +4,6 @@ state: present
 
 gpu_driver_vendors:
   - nvidia
-  # - amd
+  - amd
 
 ...
