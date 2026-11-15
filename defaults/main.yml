@@ -6,4 +6,6 @@ gpu_driver_vendors:
   - nvidia
   - amd
 
+gpu_driver_rocm_version: "10.1.0"
+
 ...
