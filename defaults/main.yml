@@ -8,4 +8,8 @@ gpu_driver_vendors:
 
 gpu_driver_rocm_version: "10.1.0"
 
+gpu_driver_nvidia_version: 620
+gpu_driver_nvidia_version_ubuntu: 615
+gpu_driver_nvidia_version_debian: 550.163.01-2
+
 ...

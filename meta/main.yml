@@ -10,11 +10,16 @@ galaxy_info:
     - name: EL
       versions:
         - "9"
-    # - name: Debian
-    #   versions:
-    #     - "bookworm"
-    # - name: "Ubuntu"
-    #   versions:
-    #     - "jammy"
-  galaxy_tags: []
+    - name: Debian
+      versions:
+        - "trixie"
+    - name: "Ubuntu"
+      versions:
+        - "noble"
+        - "resolute"
+  galaxy_tags:
+    - gpu
+    - driver
+    - amd
+    - nvidia
 dependencies: []
