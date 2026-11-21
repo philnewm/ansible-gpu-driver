@@ -8,6 +8,9 @@
 - name: Install gpu driver
   vars:
     amd_gpu_rocm_version: "{{ gpu_driver_rocm_version }}"
+    nvidia_gpu_version: "{{ gpu_driver_nvidia_version }}"
+    nvidia_gpu_version_ubuntu: "{{ gpu_driver_nvidia_version_ubuntu }}"
+    nvidia_gpu_version_debian: "{{ gpu_driver_nvidia_version_debian }}"
   loop: "{{ gpu_driver_vendors }}"
   loop_control:
     loop_var: "gpu_vendor"
