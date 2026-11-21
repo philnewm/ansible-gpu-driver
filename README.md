@@ -22,12 +22,8 @@ This role includes a molecule testing setup as a submodule at `molecule/`
  ┃   ┗ 📜, 📜, 📜, scenario_files
  ┣ 📂tasks
  ┃ ┣ 📜absent.yml
- ┃ ┣ 📜debian_amd.yml
- ┃ ┣ 📜debian_nvidia.yml
  ┃ ┣ 📜main.yml
  ┃ ┣ 📜present.yml
- ┃ ┣ 📜redhat_amd.yml
- ┃ ┣ 📜redhat_nvidia.yml
  ┃ ┗ 📜tests.yml
  ┣ 📂vars
  ┃ ┗ 📜main.yml
